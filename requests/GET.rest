@@ -1,0 +1,2 @@
+//Use in OSS/VSC with https://open-vsx.org/extension/humao/rest-client
+GET http://localhost:3001/api/events/

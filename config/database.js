@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 
-mongoose.connect('mongodb+srv://topoescobar:topoDB123@cluster0.yynhfcx.mongodb.net/')
+mongoose.connect(process.env['DATABASE_URL'])
   .then(() => {
     console.log('database connected')
   })

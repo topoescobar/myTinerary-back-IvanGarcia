@@ -1,5 +1,5 @@
 import { Router, response } from 'express'
-import events from '../events.js'
+//import events from '../events.js'
 import eventsRouter from './eventsRouter.js'
 
 const indexRouter = Router()
@@ -13,7 +13,7 @@ indexRouter.get('/', (req, res, next) => {
 indexRouter.use('/events', eventsRouter)
 
 //GET directo
-indexRouter.get('/eventos' , (req, res, next) => {
+/* indexRouter.get('/eventos' , (req, res, next) => {
   res.json({
     response: events,
     success: true,
@@ -22,5 +22,5 @@ indexRouter.get('/eventos' , (req, res, next) => {
   console.log('get eventos desde index router');
 })
 
-
+ */
 export default indexRouter

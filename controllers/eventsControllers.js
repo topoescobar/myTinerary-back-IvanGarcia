@@ -1,10 +1,12 @@
 import events from '../events.js'
+import EventModel from '../models/Events.js'
 
 const eventsController = {
 
-  getAllEvents: (req, res, next) => {
+  getAllEvents: async (req, res, next) => {
+    const allEvents = await EventModel.find()
     res.json({
-      response: events,
+      response: allEvents,
       success: true,
       error: null
     })
@@ -23,16 +25,6 @@ const eventsController = {
     // next() //ejecuta la siguiente funcion 
   },
 
-  getByDate: (req, res, next) => {
-    console.log('req.params', req.params)
-    const evento = events.find(ev => ev.fecha === req.params.fecha)
-    res.json({
-      response: evento,
-      success: true,
-      error: null
-    })
-  },
-
   getByPrice: (req, res, next) => {
     console.log('req.params', req.params)
     const evento = events.find(ev => ev.precioEntrada <= req.params.precio)
@@ -41,8 +33,28 @@ const eventsController = {
       success: true,
       error: null
     })
+  },
+
+  createEvent: async (req, res, next) => {
+
+    let error, newEvent, success = null
+
+    try {
+      newEvent = await EventModel.create(req.body)
+      success = true
+    } catch (err) {
+      console.log(error)
+      success = false
+      error = err
+    }
+
+    res.json({
+      response: newEvent,
+      success ,
+      error
+    })
+
   }
-  
 }
 
 export default eventsController

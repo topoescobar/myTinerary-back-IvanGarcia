@@ -7,8 +7,9 @@ const eventsRouter = Router()
 //cada param debe tener una ruta distinta o solo tomara el primero
 eventsRouter.get('/', eventsController.getAllEvents)
 eventsRouter.get('/names/:nombre', eventsController.getByName)
-eventsRouter.get('/dates/:fecha', eventsController.getByDate)
 eventsRouter.get('/price/:precio', eventsController.getByPrice)
+
+eventsRouter.post('/', eventsController.createEvent )
 
 
 export default eventsRouter
