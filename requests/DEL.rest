@@ -1,1 +1,3 @@
+//Use in OSS/VSC with https://open-vsx.org/extension/humao/rest-client
+
 DELETE http://localhost:3001/api/tasks/1

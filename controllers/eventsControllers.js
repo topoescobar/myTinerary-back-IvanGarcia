@@ -4,13 +4,44 @@ import EventModel from '../models/Events.js'
 const eventsController = {
 
   getAllEvents: async (req, res, next) => {
-    const allEvents = await EventModel.find()
+    let allEvents, error, success
+
+    try {
+      allEvents = await EventModel.find()
+      success = true
+    } catch (err) {
+      error = err
+      success = false
+    }
+
     res.json({
-      response: allEvents,
-      success: true,
-      error: null
+      res: allEvents,
+      success,
+      error
     })
     console.log('desde controller by eventsRouter')
+  },
+
+  getOneEvent: async (req, res, next) => {
+    console.log(req.params);
+    let error = null
+    let success = true
+    const { id } = req.params
+
+    try {
+      let event = await EventModel.findById(id)
+      success = true
+      
+          res.json({
+            res: event,
+            success: true
+          })
+
+    } catch (err) {
+      success = false
+      error = err
+    }
+
   },
 
   //con la param de indexRouter buscamos el evento con ese param (nombre)
@@ -37,21 +68,18 @@ const eventsController = {
 
   createEvent: async (req, res, next) => {
 
-    let error, newEvent, success = null
-
+    let error, newEvent, success
     try {
       newEvent = await EventModel.create(req.body)
       success = true
     } catch (err) {
-      console.log(error)
-      success = false
       error = err
+      success = false
     }
 
     res.json({
       response: newEvent,
-      success ,
-      error
+      success, error
     })
 
   }
