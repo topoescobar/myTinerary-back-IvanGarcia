@@ -1,13 +1,13 @@
 import mongoose, { Model, Schema, model } from 'mongoose'
 
-const eventSchema = Schema ({
+const placeSchema = Schema ({
   title: {type:String, required:true}, 
   imgUrl: {type:String, required:true},
   description: {type:String, required:false}, 
   alt: {type:String, required:false}, 
 }, { timestamps: true}) //segundo parametro opcional
 
-const EventModel = model('event', eventSchema)
+const PlaceModel = model('places', placeSchema)
 
-export default EventModel
+export default PlaceModel
   

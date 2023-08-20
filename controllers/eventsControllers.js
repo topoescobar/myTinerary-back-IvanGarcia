@@ -1,5 +1,5 @@
 import events from '../events.js'
-import EventModel from '../models/Events.js'
+import PlaceModel from '../models/Events.js'
 
 const eventsController = {
 
@@ -7,7 +7,7 @@ const eventsController = {
     let allEvents, error, success
 
     try {
-      allEvents = await EventModel.find()
+      allEvents = await PlaceModel.find()
       success = true
     } catch (err) {
       error = err
@@ -29,7 +29,7 @@ const eventsController = {
     const { id } = req.params
 
     try {
-      let event = await EventModel.findById(id)
+      let event = await PlaceModel.findById(id)
       success = true
       
           res.json({
@@ -67,10 +67,11 @@ const eventsController = {
   },
 
   createEvent: async (req, res, next) => {
-
+    console.log(req.body)
     let error, newEvent, success
+    //let places = req.body
     try {
-      newEvent = await EventModel.create(req.body)
+      newEvent = await PlaceModel.create(req.body)
       success = true
     } catch (err) {
       error = err

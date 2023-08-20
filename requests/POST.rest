@@ -4,11 +4,19 @@ POST http://localhost:3001/api/events/ HTTP/1.1
 content-type: application/json
 
 {
-  "title": "Tarea nueva",
-  "imgUrl": "nada",
-  "description": "dsds",
-  "alt": "asda",
+  "title": "Uno",
+  "imgUrl": "uno",
+  "description": "",
+  "alt": "",
+}, 
+{
+  "title": "Dos",
+  "imgUrl": "dos",
+  "description": "",
+  "alt": "",
 }
+
+
 
 ###
 //dara error xq el title es obligatorio
