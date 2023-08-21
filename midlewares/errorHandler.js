@@ -2,7 +2,7 @@ const errorHandler = (error, req, res, next) => {
 	let status = error.status || 500
 	console.log(error.stack)
 
- 	res.status(status).json({
+	res.status(status).json({
 		success: false,
 		status: status,
 		error: error.message
@@ -10,4 +10,4 @@ const errorHandler = (error, req, res, next) => {
 }
 
 
-export default function errorHandler
+export default errorHandler
