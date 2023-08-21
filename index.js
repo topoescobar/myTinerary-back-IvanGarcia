@@ -10,8 +10,12 @@ const port = process.env.PORT
 server.use(cors())
 server.use(express.json())
 
-//manda peticiones /api/... a traves de indexRouter
-server.use('/api', indexRouter)
+//manda peticiones /api/... a traves de indexRouter con midleware propio
+server.use('/api', (req, res, next) => {
+  console.log('Petition from:', req.ip, req.url)
+  console.log('At date', new Date().toLocaleString())
+  next()
+}, indexRouter)
 
 server.get('/', (req, res, next) => {
   res.send('server en /')
