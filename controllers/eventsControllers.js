@@ -9,16 +9,18 @@ const eventsController = {
     try {
       allEvents = await PlaceModel.find()
       success = true
+       res.json({
+      res: allEvents,
+      success,
+      error
+      })
+       
     } catch (err) {
       error = err
       success = false
     }
 
-    res.json({
-      res: allEvents,
-      success,
-      error
-    })
+   
     console.log('desde controller by eventsRouter')
   },
 
