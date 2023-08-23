@@ -7,7 +7,6 @@ const placeSchema = Schema({
   alt: { type: String, required: false },
 }, { timestamps: true }) //segundo parametro opcional
 
-const PlaceModel = model('event', placeSchema) //test DB
-//const PlaceModel = model('places', placeSchema) 
+const PlaceModel = model('places', placeSchema)
 
 export default PlaceModel
