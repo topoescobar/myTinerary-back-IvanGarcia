@@ -1,6 +1,7 @@
 import { Router, response } from 'express'
 //import events from '../events.js'
 import eventsRouter from './eventsRouter.js'
+import categoryRouter from './categoryRouter.js'
 
 const indexRouter = Router()
 
@@ -11,16 +12,6 @@ indexRouter.get('/', (req, res, next) => {
 
 //llega peticion /api/events desde index y manda a eventsRouter
 indexRouter.use('/events', eventsRouter)
+indexRouter.use('/categories', categoryRouter)
 
-//GET directo
-/* indexRouter.get('/eventos' , (req, res, next) => {
-  res.json({
-    response: events,
-    success: true,
-    error: null,
-  })
-  console.log('get eventos desde index router');
-})
-
- */
 export default indexRouter

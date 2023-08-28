@@ -1,37 +1,33 @@
 import events from '../events.js'
+import CategoryModel from '../models/Category.js'
 import PlaceModel from '../models/Events.js'
 
 const eventsController = {
 
   getAll: async (req, res, next) => {
-    let allEvents, error, success
+    let success
 
     try {
-      allEvents = await PlaceModel.find()
-      success = true
+      let allPlaces = await PlaceModel.find().populate({
+        path: 'category',
+        select: 'categoryName description'
+      }) //trae el documento de la coleccion category
       res.json({
-        res: allEvents,
-        success,
-        error
+        res: allPlaces,
+        success: true
       })
-
     } catch (err) {
-      error = err
       success = false
+      next(err)
     }
-
-
-    console.log('desde controller by eventsRouter')
   },
 
   getOne: async (req, res, next) => {
-    let error = null
-    let success = true
+    let success
     const { id } = req.params
 
     try {
       let event = await PlaceModel.findById(id)
-      success = true
 
       res.json({
         res: event,
@@ -40,25 +36,13 @@ const eventsController = {
 
     } catch (err) {
       success = false
-      error = err
+      next(err)
     }
 
   },
 
-  //con la param de indexRouter buscamos el evento con ese param (nombre)
-  getByName: (req, res, next) => {
-    console.log('req.params', req.params)
-    const evento = events.find(ev => ev.nombre === req.params.nombre)
-    res.json({
-      response: evento,
-      success: true,
-      error: null
-    })
-    // next() //ejecuta la siguiente funcion 
-  },
-
+  //con la param de indexRouter buscamos el evento con ese param (precioEntrada)
   getByPrice: (req, res, next) => {
-    console.log('req.params', req.params)
     const evento = events.find(ev => ev.precioEntrada <= req.params.precio)
     res.json({
       response: evento,
@@ -68,21 +52,22 @@ const eventsController = {
   },
 
   create: async (req, res, next) => {
-    console.log(req.body)
-    let error, newEvent, success
-    //let places = req.body
+    let success
     try {
-      newEvent = await PlaceModel.create(req.body)
-      success = true
+      const category = await CategoryModel.findOne({ categoryName: req.body.category })
+      const query = { ...req.body }
+      console.log('query', query)
+      query.category = category._id
+      const newPlace = await PlaceModel.create(query)
+      console.log('newPlace', newPlace)
+      res.json({
+        response: newPlace,
+        success: true
+      })
     } catch (err) {
-      error = err
       success = false
+      next(err)
     }
-
-    res.json({
-      response: newEvent,
-      success, error
-    })
   },
 
   update: async (req, res, next) => {
@@ -96,7 +81,6 @@ const eventsController = {
         success: true
       })
     } catch (err) {
-      console.log(err)
       success = false
       next(err) //va a entrar en el errorHandler de la peticion /api en index.js
     }
@@ -115,7 +99,6 @@ const eventsController = {
         success: true
       })
     } catch (err) {
-      console.log(err)
       success = false
       next(err) //va a entrar en el errorHandler de la peticion /api en index.js
     }
