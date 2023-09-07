@@ -1,5 +1,4 @@
 import { Router, response } from 'express'
-//import events from '../events.js'
 import eventsRouter from './eventsRouter.js'
 import categoryRouter from './categoryRouter.js'
 

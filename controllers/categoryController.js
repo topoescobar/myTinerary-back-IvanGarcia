@@ -1,4 +1,4 @@
-import CategoryModel from '../models/Category.js'
+import CategoryModel from '../models/CategoryModel.js'
 
 const categoryController = {
 
@@ -39,7 +39,7 @@ const categoryController = {
     try {
       const newCategory = await CategoryModel.create(req.body)
       res.status(201).json({
-        response: newCategory,
+        category: newCategory,
         success: true
       })
     } catch (error) {

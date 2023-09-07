@@ -1,11 +1,9 @@
-import events from '../events.js'
-import CategoryModel from '../models/Category.js'
-import PlaceModel from '../models/Events.js'
+import CategoryModel from '../models/CategoryModel.js'
+import PlaceModel from '../models/PlaceModel.js'
 
 const eventsController = {
 
   getAll: async (req, res, next) => {
-    let success
 
     try {
       let allPlaces = await PlaceModel.find().populate({
@@ -14,10 +12,8 @@ const eventsController = {
       }) //trae el documento de la coleccion category
       res.json({
         res: allPlaces,
-        success: true
       })
     } catch (err) {
-      success = false
       next(err)
     }
   },
@@ -42,8 +38,8 @@ const eventsController = {
   },
 
   //con la param de indexRouter buscamos el evento con ese param (precioEntrada)
-  getByPrice: (req, res, next) => {
-    const evento = events.find(ev => ev.precioEntrada <= req.params.precio)
+  getByPrice: async (req, res, next) => {
+    const evento = await PlaceModel.find(ev => ev.precioEntrada <= req.params.precio)
     res.json({
       response: evento,
       success: true,
@@ -52,20 +48,27 @@ const eventsController = {
   },
 
   create: async (req, res, next) => {
-    let success
     try {
-      const category = await CategoryModel.findOne({ categoryName: req.body.category })
-      const query = { ...req.body }
-      console.log('query', query)
-      query.category = category._id
-      const newPlace = await PlaceModel.create(query)
-      console.log('newPlace', newPlace)
-      res.json({
-        response: newPlace,
-        success: true
+      const placeQuery = { ...req.body } //copia con spred op para no modificar el objeto original
+      console.log(placeQuery)
+      const category = await CategoryModel.findOne({ categoryName: placeQuery.category }) //busca la categoria
+      if (category) {
+        placeQuery.category = category._id
+      } else {
+        //crea la categoria si no existe y la asigna a el id de la nueva categoria al place
+        const newCategory = await CategoryModel.create({ categoryName: placeQuery.category })
+        placeQuery.category = newCategory._id
+      }
+
+      const newPlace = await PlaceModel.create(placeQuery)
+      await CategoryModel.findOneAndUpdate({ categoryName: newPlace.category }, { $push: { places: newPlace._id } })
+
+      res.status(201).json({
+        newPlace,
+        category: req.body.category
       })
+
     } catch (err) {
-      success = false
       next(err)
     }
   },
