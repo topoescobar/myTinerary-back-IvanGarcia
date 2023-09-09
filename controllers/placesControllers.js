@@ -1,6 +1,26 @@
 import CategoryModel from '../models/CategoryModel.js'
 import PlaceModel from '../models/PlaceModel.js'
 
+export const searchPlace = async (req, res) => {
+  // obtener todos los eventos
+  const query = {}
+  if (req.query.name) {
+    query.name = { $regex: req.query.name, $options: 'i' }
+  }
+  // if (req.query.category) {
+  //   const aux = await CategoryModel.findOne({ categoryName: req.query.category })
+  //   query.category = aux._id
+  // }
+
+  try {
+    const places = await PlaceModel.find(query)
+    res.status(200).json({ status: 200, success: true, response: places })
+  } catch (error) {
+    res.status(500).json({ message: error })
+  }
+
+}
+
 const eventsController = {
 
   getAll: async (req, res, next) => {
@@ -34,7 +54,6 @@ const eventsController = {
       success = false
       next(err)
     }
-
   },
 
   //con la param de indexRouter buscamos el evento con ese param (precioEntrada)
@@ -52,6 +71,7 @@ const eventsController = {
       const placeQuery = { ...req.body } //copia con spred op para no modificar el objeto original
       console.log(placeQuery)
       const category = await CategoryModel.findOne({ categoryName: placeQuery.category }) //busca la categoria
+
       if (category) {
         placeQuery.category = category._id
       } else {
@@ -61,7 +81,8 @@ const eventsController = {
       }
 
       const newPlace = await PlaceModel.create(placeQuery)
-      await CategoryModel.findOneAndUpdate({ categoryName: newPlace.category }, { $push: { places: newPlace._id } })
+      //usa la id asignada en el condicional 
+      await CategoryModel.findOneAndUpdate({ _id: newPlace.category }, { $push: { places: newPlace._id } })
 
       res.status(201).json({
         newPlace,
