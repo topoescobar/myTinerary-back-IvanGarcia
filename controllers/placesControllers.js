@@ -2,18 +2,23 @@ import CategoryModel from '../models/CategoryModel.js'
 import PlaceModel from '../models/PlaceModel.js'
 
 export const searchPlace = async (req, res) => {
-  // obtener todos los eventos
-  const query = {}
-  if (req.query.name) {
-    query.name = { $regex: req.query.name, $options: 'i' }
+  let {title, category} = req.query //destructurign de lo que recibimos por query
+  const queried = {} //objeto vacio para asignar la peticion validada
+
+  if (title) {
+    queried.title = { $regex: title.trim(), $options: 'i' }  //busqueda con regex
   }
-  // if (req.query.category) {
-  //   const aux = await CategoryModel.findOne({ categoryName: req.query.category })
-  //   query.category = aux._id
-  // }
+   if (category) {
+     const aux = await CategoryModel.findOne({ categoryName: category })
+     queried.category = aux._id
+   }
 
   try {
-    const places = await PlaceModel.find(query)
+    console.log(queried)
+    const places = await PlaceModel.find(queried).populate({ 
+      path: 'category', //modelo relaciondo
+      select: 'categoryName description' //lo que me va a mostrar en vez del id
+    })
     res.status(200).json({ status: 200, success: true, response: places })
   } catch (error) {
     res.status(500).json({ message: error })
