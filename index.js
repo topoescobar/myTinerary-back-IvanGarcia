@@ -23,7 +23,7 @@ server.get('/', (req, res, next) => {
   res.send('Server en /')
 })
 
-server.use(notFoundHandler) //procesa el error luego de probar con las rutas anteriores y lo pasa al sig
+//server.use(notFoundHandler) //procesa el error luego de probar con las rutas anteriores y lo pasa al sig
 server.use(errorHandler) //manejo global
 
 server.listen(port, () => { console.log('Servidor corriendo en puerto: ' + port) })

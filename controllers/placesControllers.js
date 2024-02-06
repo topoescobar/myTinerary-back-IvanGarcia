@@ -34,9 +34,9 @@ const eventsController = {
       let allPlaces = await PlaceModel.find().populate({
         path: 'category',
         select: 'categoryName description'
-      }) //trae el documento de la coleccion category
+      }) //trae el documento de la coleccion category (definida en models), y selecciona para enviar al front categoryName y description
       res.json({
-        res: allPlaces,
+        placesDB: allPlaces,
       })
     } catch (err) {
       next(err)
