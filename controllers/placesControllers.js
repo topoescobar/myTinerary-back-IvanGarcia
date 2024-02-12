@@ -3,7 +3,6 @@ import PlaceModel from '../models/PlaceModel.js'
 
 export const searchPlace = async (req, res) => {
   let {title, category} = req.query //destructurign de lo que recibimos por query
-  console.log("req", req)
   const queried = {} //objeto vacio para asignar la peticion validada
 
   if (title) {
@@ -30,12 +29,18 @@ export const searchPlace = async (req, res) => {
 const placesController = {
   getAll: async (req, res, next) => {
 
-    let {title} = req.query
-    const queried = {}
-    queried.title = title
+    let {title, category} = req.query //destructurign de lo que recibimos por query
+    const queried = {} //objeto vacio para asignar la peticion validada
+    if (title) {
+      queried.title = { $regex: title.trim(), $options: 'i' }  //busqueda con regex
+    }
+     if (category) {
+       const aux = await CategoryModel.findOne({ categoryName: category })
+       queried.category = aux._id
+     }
     
     try {
-      let allPlaces = await PlaceModel.find(req.query).populate({
+      let allPlaces = await PlaceModel.find(queried).populate({
         path: 'category',
         select: 'categoryName description'
       }) //trae el documento de la coleccion category (definida en models), y selecciona para enviar al front categoryName y description
