@@ -3,6 +3,7 @@ import PlaceModel from '../models/PlaceModel.js'
 
 export const searchPlace = async (req, res) => {
   let {title, category} = req.query //destructurign de lo que recibimos por query
+  console.log("req", req)
   const queried = {} //objeto vacio para asignar la peticion validada
 
   if (title) {
@@ -14,7 +15,7 @@ export const searchPlace = async (req, res) => {
    }
 
   try {
-    console.log(queried)
+    console.log("queried", queried)
     const places = await PlaceModel.find(queried).populate({ 
       path: 'category', //modelo relaciondo
       select: 'categoryName description' //lo que me va a mostrar en vez del id
@@ -26,12 +27,15 @@ export const searchPlace = async (req, res) => {
 
 }
 
-const eventsController = {
-
+const placesController = {
   getAll: async (req, res, next) => {
 
+    let {title} = req.query
+    const queried = {}
+    queried.title = title
+    
     try {
-      let allPlaces = await PlaceModel.find().populate({
+      let allPlaces = await PlaceModel.find(req.query).populate({
         path: 'category',
         select: 'categoryName description'
       }) //trae el documento de la coleccion category (definida en models), y selecciona para enviar al front categoryName y description
@@ -136,4 +140,4 @@ const eventsController = {
 
 }
 
-export default eventsController
+export default placesController

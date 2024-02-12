@@ -9,7 +9,7 @@ indexRouter.get('/', (req, res, next) => {
   res.send('server en /api')
 })
 
-//llega peticion /api/events desde index y manda a eventsRouter
+//llega peticion /api/events desde index y manda a placesRouter
 indexRouter.use('/places', placesRouter)
 indexRouter.use('/categories', categoryRouter)
 
